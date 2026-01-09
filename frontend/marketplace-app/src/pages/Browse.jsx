@@ -25,6 +25,7 @@ export default function Browse() {
       <div>
         <h1>Browse Listings</h1>
         <p><Link to="/create">Create Listing</Link></p>
+        <p><Link to="/listings/me">My Listings</Link></p>
       </div>
       {listings.length === 0 ? (
         <p>No listings available.</p>
