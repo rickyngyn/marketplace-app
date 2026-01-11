@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect, Button } from "react";
+import { useState, useEffect} from "react";
 import { apiGet, apiDelete } from "../api";
 
 export default function MyListings() {
@@ -52,6 +52,7 @@ export default function MyListings() {
                 Created: {new Date(listing.created_at).toLocaleString()}
               </div>
               <button onClick={() => deleteListing(listing.id)}> Delete </button>
+              <Link to={`/listings/${listing.id}/edit`}><button>Edit</button></Link>
             </li>
           ))}
         </ul>
