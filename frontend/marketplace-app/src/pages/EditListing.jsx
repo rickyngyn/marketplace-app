@@ -30,6 +30,7 @@ export default function EditListing() {
     fetchListing();
   }, [id]);
 
+  
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
