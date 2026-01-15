@@ -5,6 +5,7 @@ function getAuthToken() {
   if (!token) return {};
   return { Authorization: `Bearer ${token}` };
 }
+
 export async function apiGet(path) {
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: {

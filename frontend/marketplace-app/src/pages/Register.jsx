@@ -51,7 +51,7 @@ export default function Register() {
       if (register.token) localStorage.setItem("token", register.token);
       if (register.user)
         localStorage.setItem("user", JSON.stringify(register.user));
-      navigate("/");
+      navigate("/browse");
     } catch (err) {
       setError(err.message);
     } finally {

@@ -37,7 +37,7 @@ export default function MyListings() {
 
   return (
     <div>
-      <Link to="/">Back To Browse</Link>
+      <Link to="/browse">Back To Browse</Link>
       <h1>My Listings</h1>
       {listings.length === 0 ? (
         <p>You have no listings</p>

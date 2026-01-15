@@ -1,0 +1,14 @@
+{
+  "name": "marketplace",
+  "version": "1.0.0",
+  "description": "Marketplace app - Backend + Frontend",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"cd backend && node app.js\" \"cd frontend/marketplace-app && npm run dev\"",
+    "backend": "cd backend && node app.js",
+    "frontend": "cd frontend/marketplace-app && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

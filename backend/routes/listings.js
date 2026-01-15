@@ -1,24 +1,30 @@
 const { Pool } = require("pg");
 const express = require("express");
+const requireAuth = require("../middleware/requireAuth");
 const router = express.Router();
 
 const pool = new Pool();
 
-router.post("/", async (req, res) => {
+router.post("/", requireAuth, async (req, res) => {
   const { title, description, price } = req.body;
-  const user_id = 1; // for now
+  const userId = req.userId;
 
   try {
-    if (!title || price === undefined || price === null) {
-      return res.status(400).json({ message: "All fields required" });
+    if (!title || title.trim() === "") {
+      return res.status(400).json({ message: "Title is required" });
     }
+    if (price === undefined || price === null || Number.isNaN(Number(price))) {
+      return res.status(400).json({ message: "Valid price is required" });
+    }
+
     const results = await pool.query(
       "INSERT INTO listings (title, description, price, user_id) VALUES ($1, $2, $3, $4) RETURNING id, title, price, user_id",
-      [title, description || null, price, user_id]
+      [title.trim(), description.trim() || null, Number(price), userId]
     );
 
     return res.status(201).json(results.rows[0]);
   } catch (err) {
+    console.error("Create listing error:", err);
     return res.status(500).json({ message: "Server error" });
   }
 });
@@ -34,8 +40,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/me", async (req, res) => {
-  const userId = 1; //temp
+router.get("/me", requireAuth, async (req, res) => {
+  const userId = req.userId;
 
   try {
     const results = await pool.query(
@@ -44,6 +50,7 @@ router.get("/me", async (req, res) => {
     );
     return res.json(results.rows);
   } catch (err) {
+    console.error("Get my listings error:", err);
     return res.status(500).json({ message: "Server error" });
   }
 });
@@ -64,15 +71,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", requireAuth, async (req, res) => {
   const { id } = req.params;
   const { title, description, price } = req.body;
-  const user_id = 1;
+  const user_id = req.userId;
 
   try {
+    if (!title || title.trim() === "") {
+      return res.status(400).json({ message: "Title is required" });
+    }
+    if (price === undefined || price === null || Number.isNaN(Number(price))) {
+      return res.status(400).json({ message: "Valid price is required" });
+    }
+
     const results = await pool.query(
       "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price) WHERE id = $4 AND user_id = $5 RETURNING id, title, description, price, user_id, created_at",
-      [title ?? null, description ?? null, price ?? null, id, user_id]
+      [title.trim(), description.trim() || null, Number(price), id, user_id]
     );
     if (results.rows.count === 0) {
       return res
@@ -81,13 +95,14 @@ router.patch("/:id", async (req, res) => {
     }
     return res.json(results.rows[0]);
   } catch (err) {
+    console.error("Update listing error:", err);
     return res.status(500).json({ message: "Server Error" });
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   const { id } = req.params;
-  const userId = 1;
+  const userId = req.userId;
   try {
     const results = await pool.query(
       "DELETE FROM listings WHERE id = $1 AND user_id = $2 RETURNING id, title",
@@ -100,6 +115,7 @@ router.delete("/:id", async (req, res) => {
     }
     return res.json({ message: "Listing deleted" });
   } catch (err) {
+    console.error("Delete listing error:", err);
     return res.status(500).json({ message: "Server Error" });
   }
 });
