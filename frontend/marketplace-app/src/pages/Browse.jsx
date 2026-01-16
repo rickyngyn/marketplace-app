@@ -21,7 +21,7 @@ export default function Browse() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <div>
         <h1>Browse Listings</h1>
         <p><Link to="/create">Create Listing</Link></p>
