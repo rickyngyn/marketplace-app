@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { apiPost } from "../api";
 
 export default function Register() {
@@ -150,6 +150,7 @@ export default function Register() {
           {registering ? "Registering..." : "Register"}
         </button>
       </form>
+      <div><Link to="/"><p1>Have an account?</p1></Link></div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { apiPost } from "../api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -48,8 +49,47 @@ export default function Login() {
       {error ? <div>{error}</div> : null}
 
       <form onSubmit={handleLogin}>
-        <div></div>
+        <div>
+          <label>
+            Email
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                display: "block",
+                width: "100%",
+                padding: 8,
+                marginTop: 6,
+              }}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Password{" "}
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                display: "block",
+                width: "100%",
+                padding: 8,
+                marginTop: 6,
+              }}
+            />
+          </label>
+        </div>
+        <button type="submit" diabled={loggingIn}>
+          {loggingIn ? "Logging in..." : "Login"}
+        </button>
       </form>
+      <div>
+        <Link to="/register">
+          <p1>Don't have an account?</p1>
+        </Link>
+      </div>
     </div>
   );
 }

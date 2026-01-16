@@ -8,12 +8,14 @@ import CreateListing from "./pages/CreateListing.jsx";
 import MyListings from "./pages/MyListings.jsx";
 import EditListings from "./pages/EditListing.jsx";
 import Register from "./pages/Register.jsx";
+import Login from "./pages/Login.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Register />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/listings/:id" element={<ListingDetails />} />
         <Route path="/create" element={<CreateListing />} />
         <Route path="/listings/me" element={<MyListings />} />
