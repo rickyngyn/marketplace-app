@@ -81,13 +81,13 @@ export default function Login() {
             />
           </label>
         </div>
-        <button type="submit" diabled={loggingIn}>
+        <button type="submit" disabled={loggingIn}>
           {loggingIn ? "Logging in..." : "Login"}
         </button>
       </form>
       <div>
         <Link to="/register">
-          <p1>Don't have an account?</p1>
+          <p>Don't have an account?</p>
         </Link>
       </div>
     </div>

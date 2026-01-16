@@ -110,7 +110,7 @@ export default function EditListing() {
         <div>
           <label>Price</label>
           <input
-            type="Nubmer"
+            type="number"
             step="0.01"
             value={price}
             onChange={(e) => setPrice(e.target.value)}

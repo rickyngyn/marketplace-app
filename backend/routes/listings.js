@@ -19,7 +19,12 @@ router.post("/", requireAuth, async (req, res) => {
 
     const results = await pool.query(
       "INSERT INTO listings (title, description, price, user_id) VALUES ($1, $2, $3, $4) RETURNING id, title, price, user_id",
-      [title.trim(), description.trim() || null, Number(price), userId]
+      [
+        title.trim(),
+        description ? description.trim() || null : null,
+        Number(price),
+        userId,
+      ]
     );
 
     return res.status(201).json(results.rows[0]);
@@ -86,9 +91,15 @@ router.patch("/:id", requireAuth, async (req, res) => {
 
     const results = await pool.query(
       "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price) WHERE id = $4 AND user_id = $5 RETURNING id, title, description, price, user_id, created_at",
-      [title.trim(), description.trim() || null, Number(price), id, user_id]
+      [
+        title.trim(),
+        description ? description.trim() || null : null,
+        Number(price),
+        id,
+        user_id,
+      ]
     );
-    if (results.rows.count === 0) {
+    if (results.rowCount === 0) {
       return res
         .status(400)
         .json({ message: "Listings not found or not yours" });
@@ -108,7 +119,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
       "DELETE FROM listings WHERE id = $1 AND user_id = $2 RETURNING id, title",
       [id, userId]
     );
-    if (results.rows.count === 0) {
+    if (results.rowCount === 0) {
       return res
         .status(400)
         .json({ message: "Listing not found or not yours" });

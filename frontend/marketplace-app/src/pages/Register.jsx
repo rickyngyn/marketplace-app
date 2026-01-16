@@ -150,7 +150,7 @@ export default function Register() {
           {registering ? "Registering..." : "Register"}
         </button>
       </form>
-      <div><Link to="/"><p1>Have an account?</p1></Link></div>
+      <div><Link to="/"><p>Have an account?</p></Link></div>
     </div>
   );
 }
