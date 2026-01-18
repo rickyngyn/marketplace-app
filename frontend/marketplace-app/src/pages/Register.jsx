@@ -4,10 +4,8 @@ import { apiPost } from "../api";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -63,7 +61,7 @@ export default function Register() {
       if (register.token) localStorage.setItem("token", register.token);
       if (register.user)
         localStorage.setItem("user", JSON.stringify(register.user));
-      navigate("/browse");
+      navigate("/login");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -95,104 +93,64 @@ export default function Register() {
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="last_name">Last Name</Label>
+              <Input
+                id="last_name"
+                type="text"
+                value={last_name}
+                placeholder="e.g. Doe"
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                placeholder="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                placeholder="Enter your password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                placeholder="Confirm your password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+
+            <Button type="submit" disabled={registering} className="w-full">
+              {registering ? "Registering..." : "Register"}
+            </Button>
+
+            <div className="mt-4 text-center text-sm">
+              Already have an account?{" "}
+              <Link to="/" className="text-blue-600 hover:underline">
+                Login here
+              </Link>
+            </div>
           </form>
         </CardContent>
       </Card>
     </div>
   );
-
-  // return (
-  //   <div>
-  //     <h1>Register</h1>
-  //     {error ? <div>Error: {error}</div> : null}
-
-  //     <form onSubmit={handleRegister}>
-  //       <div>
-  //         <label>
-  //           First Name
-  //           <input
-  //             type="text"
-  //             value={first_name}
-  //             onChange={(e) => setFirstName(e.target.value)}
-  //             style={{
-  //               display: "block",
-  //               width: "100%",
-  //               padding: 8,
-  //               marginTop: 6,
-  //             }}
-  //           />
-  //         </label>
-  //       </div>
-  //       <div>
-  //         <label>
-  //           Last Name
-  //           <input
-  //             type="text"
-  //             value={last_name}
-  //             onChange={(e) => setLastName(e.target.value)}
-  //             style={{
-  //               display: "block",
-  //               width: "100%",
-  //               padding: 8,
-  //               marginTop: 6,
-  //             }}
-  //           />
-  //         </label>
-  //       </div>
-  //       <div>
-  //         <label>
-  //           Email
-  //           <input
-  //             type="email"
-  //             value={email}
-  //             onChange={(e) => setEmail(e.target.value)}
-  //             style={{
-  //               display: "block",
-  //               width: "100%",
-  //               padding: 8,
-  //               marginTop: 6,
-  //             }}
-  //           />
-  //         </label>
-  //       </div>
-  //       <div>
-  //         <label>
-  //           Password
-  //           <input
-  //             type="password"
-  //             value={password}
-  //             onChange={(e) => setPassword(e.target.value)}
-  //             style={{
-  //               display: "block",
-  //               width: "100%",
-  //               padding: 8,
-  //               marginTop: 6,
-  //             }}
-  //           />
-  //         </label>
-  //       </div>
-  //       <div>
-  //         <label>
-  //           Confirm Password
-  //           <input
-  //             type="password"
-  //             value={confirmPassword}
-  //             onChange={(e) => setConfirmPassword(e.target.value)}
-  //             style={{
-  //               display: "block",
-  //               width: "100%",
-  //               padding: 8,
-  //               marginTop: 6,
-  //             }}
-  //           />
-  //         </label>
-  //       </div>
-
-  //       <button type="submit" disabled={registering}>
-  //         {registering ? "Registering..." : "Register"}
-  //       </button>
-  //     </form>
-  //     <div><Link to="/"><p>Have an account?</p></Link></div>
-  //   </div>
-  // );
 }
