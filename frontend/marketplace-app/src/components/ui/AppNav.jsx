@@ -25,7 +25,7 @@ export default function AppNav() {
 
   return (
     <nav className="w-full border-b bg-background">
-      <div className="max-w-7x1 mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="max-w-screen mx-auto px-4 h-14 flex items-center justify-between">
         <Link to="/browse" className="font-semibold text-lg">
           Marketplace
         </Link>

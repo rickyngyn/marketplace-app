@@ -67,9 +67,6 @@ export default function EditListing() {
 
   return (
     <div>
-      <div>
-        <Link to="/listings/me">Back to My Listings</Link>
-      </div>
 
       <h1>Edit Listing</h1>
 

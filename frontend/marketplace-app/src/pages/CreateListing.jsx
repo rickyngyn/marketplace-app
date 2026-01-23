@@ -45,9 +45,6 @@ export default function CreateListing() {
 
   return (
     <div>
-      <div>
-        <Link to="/browse">Back To Browse</Link>
-      </div>
 
       <h1>Create Listing</h1>
 

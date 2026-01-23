@@ -24,7 +24,6 @@ export default function ListingDetails() {
 
   return (
     <div>
-      <Link to="/browse">Back to Browse</Link>
       <h1>{listing.title}</h1>
       <p>${listing.price}</p>
       <p>{listing.description || "No description available."}</p>
