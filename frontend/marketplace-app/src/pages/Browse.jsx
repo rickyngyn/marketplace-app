@@ -5,13 +5,14 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { Card } from "@/components/ui/card";
 import { Search } from "lucide-react";
 import { apiGet } from "../api";
 
 export default function Browse() {
   const [listings, setListings] = useState([]);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     async function fetchListings() {
@@ -24,6 +25,10 @@ export default function Browse() {
     }
     fetchListings();
   }, []);
+
+  const filteredListings = listings.filter((listing) =>
+    listing.title.toLowerCase().includes(search.toLowerCase()),
+  );
 
   if (error) return <div>Error: {error}</div>;
 
@@ -38,37 +43,42 @@ export default function Browse() {
 
       <div className="mt-3">
         <InputGroup className="max-w-xs">
-          <InputGroupInput placeholder="Search..." />
+          <InputGroupInput
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
-          <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+          <InputGroupAddon align="inline-end">
+            {filteredListings.length} results
+          </InputGroupAddon>
         </InputGroup>
+      </div>
+
+      <div>
+        {filteredListings.length === 0 ? (
+          <p className="text-sm text-gray-600">No available listings</p>
+        ) : (
+          <ul className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {" "}
+            {filteredListings.map((listing) => (
+              <Card className="max-w-64 p-4">
+                <li key={listing.id}>
+                  <Link to={`/listings/${listing.id}`}>
+                    <div className="font-semibold">${listing.price}</div>
+                    <div>{listing.title}</div>
+                  </Link>
+                  <div className="text-xs text-white-600 ">
+                    Seller: {listing.first_name} {listing.last_name}
+                  </div>
+                </li>
+              </Card>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
-
-  // return (
-  //   <div>
-  //     <div>
-  //       <h1>Browse Listings</h1>
-  //     </div>
-  //     {listings.length === 0 ? (
-  //       <p>No listings available.</p>
-  //     ) : (
-  //       <ul>
-  //         {listings.map((listing) => (
-  //           <li key={listing.id}>
-  //             <Link to={`/listings/${listing.id}`}>
-  //               {listing.title} - ${listing.price}
-  //             </Link>
-  //             <div>
-  //               Seller: {listing.first_name} {listing.last_name}
-  //             </div>
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     )}
-  //   </div>
-  // );
 }
