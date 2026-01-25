@@ -1,6 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { apiPost } from "../api";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function CreateListing() {
   const [error, setError] = useState("");
@@ -46,93 +56,74 @@ export default function CreateListing() {
   }
 
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Create Listing</CardTitle>
+          <CardDescription>Create listing with title and price</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-md text-sm">
+              {error}
+            </div>
+          )}
 
-      <h1>Create Listing</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                type="title"
+                placeholder="Enter listing title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
 
-      {error ? <div>{error}</div> : null}
+            <div className="space-y-2">
+              <Label htmlFor="price">Price</Label>
+              <Input
+                id="price"
+                type="price"
+                placeholder="Enter listing price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Title
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: 8,
-                marginTop: 6,
-              }}
-              placeholder="Example: Desk lamp"
-            />
-          </label>
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                type="description"
+                placeholder="Enter description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
 
-        <div>
-          <label>
-            Description (optional)
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: 8,
-                marginTop: 6,
-              }}
-              placeholder="Condition, pickup details, etc."
-            />
-          </label>
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact_info">Contact Info</Label>
+              <Input
+                id="contact_info"
+                type="contact_info"
+                placeholder="e.g. 555 555 5555 or example@email.com"
+                value={contact_info}
+                onChange={(e) => setContact(e.target.value)}
+              />
+            </div>
 
-        <div>
-          <label>
-            Price
-            <input
-              type="number"
-              step="0.01"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: 8,
-                marginTop: 6,
-              }}
-              placeholder="Example: 19.99"
-            />
-          </label>
-        </div>
+            <Button type="submit" disabled={submitting} className="w-full">
+              {submitting ? "Submitting..." : "Submit"}
+            </Button>
+          </form>
 
-        <div>
-          <label>
-            Contact
-            <input
-              type="text"
-              value={contact_info}
-              onChange={(e) => setContact(e.target.value)}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: 8,
-                marginTop: 6,
-              }}
-              placeholder="Example: 412 995 4853, johndoe@email.com"
-            />
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          style={{ padding: "10px 20px", marginTop: "10px" }}
-        >
-          {submitting ? "Submitting..." : "Create Listing"}
-        </button>
-      </form>
+          <Button className="w-full mt-2 bg-gray-600">
+            <Link to="/browse">Back</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

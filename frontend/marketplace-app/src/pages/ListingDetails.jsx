@@ -24,13 +24,20 @@ export default function ListingDetails() {
 
   return (
     <div>
-      <h1>{listing.title}</h1>
-      <p>${listing.price}</p>
-      <p>{listing.description || "No description available."}</p>
-      <p>{listing.contact_info}</p>
-      <p>
-        Seller: {listing.first_name} {listing.last_name}
-      </p>
+      <h1 className="text-4xl font-bold mb-2">{listing.title}</h1>
+      <p className="text-md font-semibold">${listing.price}</p>
+      <div className="py-5">
+        <p className="font-semibold">Details</p>
+        <p className="text-sm">{listing.description || "No description available."}</p>
+      </div>
+      <p className="font-semibold">Seller Information</p>
+      
+      <div className="text-sm">
+        <p>
+          {listing.first_name} {listing.last_name}
+        </p>
+        <p>{listing.contact_info}</p>
+      </div>
     </div>
   );
 }
