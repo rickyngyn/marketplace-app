@@ -7,6 +7,7 @@ export default function CreateListing() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [contact_info, setContact] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function CreateListing() {
       const created = await apiPost("/api/listings", {
         title: title.trim(),
         description: description.trim() || null,
+        contact_info: contact_info.trim(),
         price: Number(price),
       });
 
@@ -101,6 +103,24 @@ export default function CreateListing() {
                 marginTop: 6,
               }}
               placeholder="Example: 19.99"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Contact
+            <input
+              type="text"
+              value={contact_info}
+              onChange={(e) => setContact(e.target.value)}
+              style={{
+                display: "block",
+                width: "100%",
+                padding: 8,
+                marginTop: 6,
+              }}
+              placeholder="Example: 412 995 4853, johndoe@email.com"
             />
           </label>
         </div>

@@ -27,6 +27,7 @@ export default function ListingDetails() {
       <h1>{listing.title}</h1>
       <p>${listing.price}</p>
       <p>{listing.description || "No description available."}</p>
+      <p>{listing.contact_info}</p>
       <p>
         Seller: {listing.first_name} {listing.last_name}
       </p>
