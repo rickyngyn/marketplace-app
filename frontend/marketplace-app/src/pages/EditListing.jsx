@@ -138,9 +138,11 @@ export default function EditListing() {
             </Button>
           </form>
 
-          <Button className="w-full mt-2 bg-gray-600">
-            <Link to="/browse">Back</Link>
-          </Button>
+          <Link to="/listings/me">
+            <Button className="w-full mt-2 bg-gray-600">
+              Back
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </div>

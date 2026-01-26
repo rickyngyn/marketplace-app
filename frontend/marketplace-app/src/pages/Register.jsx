@@ -142,7 +142,7 @@ export default function Register() {
               {registering ? "Registering..." : "Register"}
             </Button>
 
-            <div className="mt-4 text-center text-sm">
+            <div className="text-center text-sm">
               Already have an account?{" "}
               <Link to="/" className="text-blue-600 hover:underline">
                 Login here
