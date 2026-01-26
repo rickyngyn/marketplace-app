@@ -23,7 +23,7 @@ router.post("/", requireAuth, async (req, res) => {
         title.trim(),
         description ? description.trim() || null : null,
         Number(price),
-        contact_info.trim(),
+        contact_info ? contact_info.trim() : null,
         userId,
       ]
     );
@@ -91,12 +91,12 @@ router.patch("/:id", requireAuth, async (req, res) => {
     }
 
     const results = await pool.query(
-      "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price), contact_info = COALESCE($4, contact_info) WHERE id = $4 AND user_id = $5 RETURNING id, title, description, price, contact_info user_id, created_at",
+      "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price), contact_info = COALESCE($4, contact_info) WHERE id = $5 AND user_id = $6 RETURNING id, title, description, price, contact_info, user_id, created_at",
       [
         title.trim(),
-        description ? description.trim() || null : null,
+        (description ?? "").trim(),
         Number(price),
-        contact_info.trim(),
+        (contact_info ?? "").trim(),
         id,
         user_id,
       ]

@@ -59,7 +59,7 @@ export default function Browse() {
 
       <div>
         {filteredListings.length === 0 ? (
-          <p className="text-sm text-gray-600">No available listings</p>
+          <p className="text-sm text-gray-600 mt-2">No available listings</p>
         ) : (
           <ul className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {" "}
@@ -67,10 +67,10 @@ export default function Browse() {
               <Card className="max-w-64 p-4">
                 <li key={listing.id}>
                   <Link to={`/listings/${listing.id}`}>
-                    <div className="font-semibold">${listing.price}</div>
-                    <div>{listing.title}</div>
+                    <div className="font-bold truncate">${listing.price}</div>
+                    <div className="font-semibold truncate">{listing.title}</div>
                   </Link>
-                  <div className="text-xs text-white-600 ">
+                  <div className="text-xs truncate">
                     Seller: {listing.first_name} {listing.last_name}
                   </div>
                 </li>

@@ -56,7 +56,7 @@ export default function CreateListing() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center mt-25 bg-gray-100">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Create Listing</CardTitle>

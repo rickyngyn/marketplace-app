@@ -1,6 +1,16 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { apiPatch, apiGet } from "../api";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function EditListing() {
   const { id } = useParams();
@@ -9,6 +19,7 @@ export default function EditListing() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [contact_info, setContact] = useState("");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -21,6 +32,7 @@ export default function EditListing() {
         setTitle(data.title);
         setDescription(data.description || "");
         setPrice(data.price.toString());
+        setContact(data.contact_info);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -30,7 +42,6 @@ export default function EditListing() {
     fetchListing();
   }, [id]);
 
-  
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -51,6 +62,7 @@ export default function EditListing() {
       const updated = await apiPatch(`/api/listings/${id}`, {
         title: title.trim(),
         description: description.trim() || null,
+        contact_info: contact_info.trim(),
         price: Number(price),
       });
 
@@ -62,69 +74,75 @@ export default function EditListing() {
     }
   }
 
-  if (loading) return <div>Loading...</div>;
-  if (error && !submitting) return <div>Error: {error}</div>;
-
   return (
-    <div>
+    <div className="flex items-center justify-center mt-25 bg-gray-100">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Edit Listing</CardTitle>
+          <CardDescription>Change listing info</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-md text-sm">
+              {error}
+            </div>
+          )}
 
-      <h1>Edit Listing</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                type="title"
+                placeholder="Enter listing title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
 
-      {error ? <div>Error: {error}</div> : null}
+            <div className="space-y-2">
+              <Label htmlFor="price">Price</Label>
+              <Input
+                id="price"
+                type="price"
+                placeholder="Enter listing price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Title{" "}
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: 8,
-                marginTop: 6,
-              }}
-            />
-          </label>
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                type="description"
+                placeholder="Enter description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
 
-        <div>
-          <label>Description (optional)</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            style={{
-              display: "block",
-              width: "100%",
-              padding: 8,
-              marginTop: 6,
-            }}
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact_info">Contact Info</Label>
+              <Input
+                id="contact_info"
+                type="contact_info"
+                placeholder="e.g. 555 555 5555 or example@email.com"
+                value={contact_info}
+                onChange={(e) => setContact(e.target.value)}
+              />
+            </div>
 
-        <div>
-          <label>Price</label>
-          <input
-            type="number"
-            step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            style={{
-              display: "block",
-              width: "100%",
-              padding: 8,
-              marginTop: 6,
-            }}
-          />
-        </div>
+            <Button type="submit" disabled={submitting} className="w-full">
+              {submitting ? "Submitting..." : "Submit"}
+            </Button>
+          </form>
 
-        <button type="submit" disabled={submitting}>
-          {" "}
-          {submitting ? "Saving..." : "Save Changes"}
-        </button>
-      </form>
+          <Button className="w-full mt-2 bg-gray-600">
+            <Link to="/browse">Back</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
