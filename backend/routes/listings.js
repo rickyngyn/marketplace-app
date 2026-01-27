@@ -1,13 +1,16 @@
 const { Pool } = require("pg");
 const express = require("express");
 const requireAuth = require("../middleware/requireAuth");
+const upload = require("../middleware/upload");
 const router = express.Router();
 
 const pool = new Pool();
 
-router.post("/", requireAuth, async (req, res) => {
+router.post("/", requireAuth, upload.array("photos", 6), async (req, res) => {
   const { title, description, price, contact_info } = req.body;
   const userId = req.userId;
+
+  const photos = req.files ? req.files.map((file) => `/uploads/${file.filename}`) : [];
 
   try {
     if (!title || title.trim() === "") {
@@ -18,14 +21,15 @@ router.post("/", requireAuth, async (req, res) => {
     }
 
     const results = await pool.query(
-      "INSERT INTO listings (title, description, price, contact_info, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, title, price, user_id",
+      "INSERT INTO listings (title, description, price, contact_info, photos, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, title, price, user_id",
       [
         title.trim(),
         description ? description.trim() || null : null,
         Number(price),
         contact_info ? contact_info.trim() : null,
+        photos,
         userId,
-      ]
+      ],
     );
 
     return res.status(201).json(results.rows[0]);
@@ -38,7 +42,7 @@ router.post("/", requireAuth, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const results = await pool.query(
-      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id ORDER BY listings.created_at DESC"
+      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id ORDER BY listings.created_at DESC",
     );
     return res.json(results.rows);
   } catch (err) {
@@ -52,7 +56,7 @@ router.get("/me", requireAuth, async (req, res) => {
   try {
     const results = await pool.query(
       "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id WHERE listings.user_id = $1 ORDER BY listings.created_at DESC",
-      [userId]
+      [userId],
     );
     return res.json(results.rows);
   } catch (err) {
@@ -66,7 +70,7 @@ router.get("/:id", async (req, res) => {
   try {
     const results = await pool.query(
       "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id WHERE listings.id = $1",
-      [id]
+      [id],
     );
     if (results.rows.length === 0) {
       return res.status(400).json({ message: "Listing not found" });
@@ -77,10 +81,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.patch("/:id", requireAuth, async (req, res) => {
+router.patch("/:id", requireAuth, upload.array("photos",6), async (req, res) => {
   const { id } = req.params;
   const { title, description, price, contact_info } = req.body;
   const user_id = req.userId;
+
+  const newPhotos = req.files && req.files.length > 0 ? req.files.map((file) => `/uploads/${file.filename}`) : null;
 
   try {
     if (!title || title.trim() === "") {
@@ -91,15 +97,16 @@ router.patch("/:id", requireAuth, async (req, res) => {
     }
 
     const results = await pool.query(
-      "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price), contact_info = COALESCE($4, contact_info) WHERE id = $5 AND user_id = $6 RETURNING id, title, description, price, contact_info, user_id, created_at",
+      "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price), contact_info = COALESCE($4, contact_info), photos = COALESCE($5, photos) WHERE id = $5 AND user_id = $6 RETURNING id, title, description, price, contact_info, user_id, created_at",
       [
         title.trim(),
         (description ?? "").trim(),
         Number(price),
         (contact_info ?? "").trim(),
+        newPhotos,
         id,
         user_id,
-      ]
+      ],
     );
     if (results.rowCount === 0) {
       return res
@@ -119,7 +126,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
   try {
     const results = await pool.query(
       "DELETE FROM listings WHERE id = $1 AND user_id = $2 RETURNING id, title",
-      [id, userId]
+      [id, userId],
     );
     if (results.rowCount === 0) {
       return res
