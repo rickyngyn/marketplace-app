@@ -9,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Search } from "lucide-react";
 import { apiGet } from "../api";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function Browse() {
   const [listings, setListings] = useState([]);
   const [error, setError] = useState("");
@@ -68,8 +70,20 @@ export default function Browse() {
                 <li key={listing.id}>
                   <Link to={`/listings/${listing.id}`}>
                     <div className="font-bold truncate">${listing.price}</div>
-                    <div className="font-semibold truncate">{listing.title}</div>
+                    <div className="font-semibold truncate">
+                      {listing.title}
+                    </div>
                   </Link>
+                  {listing.photos?.[0] ? (
+                    <img
+                      src={`${BASE_URL}${listing.photos[0]}`}
+                      alt={listing.title}
+                      className="w-full h-32 object-cover rounded-md mb-2 border"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-32 rounded-md mb-2 border bg-gray-100" />
+                  )}
                   <div className="text-xs truncate">
                     Seller: {listing.first_name} {listing.last_name}
                   </div>

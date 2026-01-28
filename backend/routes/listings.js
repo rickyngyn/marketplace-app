@@ -42,7 +42,7 @@ router.post("/", requireAuth, upload.array("photos", 6), async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const results = await pool.query(
-      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id ORDER BY listings.created_at DESC",
+      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.photos, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id ORDER BY listings.created_at DESC",
     );
     return res.json(results.rows);
   } catch (err) {
@@ -55,7 +55,7 @@ router.get("/me", requireAuth, async (req, res) => {
 
   try {
     const results = await pool.query(
-      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id WHERE listings.user_id = $1 ORDER BY listings.created_at DESC",
+      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.photos, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id WHERE listings.user_id = $1 ORDER BY listings.created_at DESC",
       [userId],
     );
     return res.json(results.rows);
@@ -69,7 +69,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const results = await pool.query(
-      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id WHERE listings.id = $1",
+      "SELECT listings.id, listings.title, listings.description, listings.price, listings.contact_info, listings.photos, listings.created_at, users.id AS user_id, users.first_name, users.last_name FROM listings JOIN users ON listings.user_id = users.id WHERE listings.id = $1",
       [id],
     );
     if (results.rows.length === 0) {
@@ -97,7 +97,7 @@ router.patch("/:id", requireAuth, upload.array("photos",6), async (req, res) => 
     }
 
     const results = await pool.query(
-      "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price), contact_info = COALESCE($4, contact_info), photos = COALESCE($5, photos) WHERE id = $5 AND user_id = $6 RETURNING id, title, description, price, contact_info, user_id, created_at",
+      "UPDATE listings SET title = COALESCE($1, title), description = COALESCE($2, description), price = COALESCE($3, price), contact_info = COALESCE($4, contact_info), photos = COALESCE($5, photos) WHERE id = $6 AND user_id = $7 RETURNING id, title, description, price, contact_info, user_id, created_at",
       [
         title.trim(),
         (description ?? "").trim(),

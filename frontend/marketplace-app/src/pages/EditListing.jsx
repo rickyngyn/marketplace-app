@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { apiPatch, apiGet } from "../api";
+import { apiPatchForm, apiGet } from "../api";
 import {
   Card,
   CardContent,
@@ -20,6 +20,7 @@ export default function EditListing() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [contact_info, setContact] = useState("");
+  const [photoFiles, setPhotoFiles] = useState([]);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -59,12 +60,17 @@ export default function EditListing() {
     setSubmitting(true);
 
     try {
-      const updated = await apiPatch(`/api/listings/${id}`, {
-        title: title.trim(),
-        description: description.trim() || null,
-        contact_info: contact_info.trim(),
-        price: Number(price),
+      const form = new FormData();
+      form.append("title", title.trim());
+      form.append("description", description.trim() || "");
+      form.append("contact_info", contact_info.trim());
+      form.append("price", String(price));
+
+      photoFiles.slice(0, 6).forEach((file) => {
+        form.append("photos", file);
       });
+
+      const updated = await apiPatchForm(`/api/listings/${id}`, form);
 
       navigate(`/listings/${updated.id}`);
     } catch (err) {
@@ -133,15 +139,27 @@ export default function EditListing() {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="photos">Photos</Label>
+              <Input
+                id="photos"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) =>
+                  setPhotoFiles(Array.from(e.target.files) || [])
+                }
+              />
+              <p className="text-xs text-gray-600">Select up to 6 images</p>
+            </div>
+
             <Button type="submit" disabled={submitting} className="w-full">
               {submitting ? "Submitting..." : "Submit"}
             </Button>
           </form>
 
           <Link to="/listings/me">
-            <Button className="w-full mt-2 bg-gray-600">
-              Back
-            </Button>
+            <Button className="w-full mt-2 bg-gray-600">Back</Button>
           </Link>
         </CardContent>
       </Card>

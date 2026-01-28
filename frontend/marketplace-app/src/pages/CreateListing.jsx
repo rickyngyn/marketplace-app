@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { apiPost } from "../api";
+import { apiPostForm } from "../api";
 import {
   Card,
   CardContent,
@@ -18,6 +18,7 @@ export default function CreateListing() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [contact_info, setContact] = useState("");
+  const [photoFiles, setPhotoFiles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -40,13 +41,17 @@ export default function CreateListing() {
     setSubmitting(true);
 
     try {
-      const created = await apiPost("/api/listings", {
-        title: title.trim(),
-        description: description.trim() || null,
-        contact_info: contact_info.trim(),
-        price: Number(price),
+      const form = new FormData();
+      form.append("title", title.trim());
+      form.append("description", description.trim() || "");
+      form.append("contact_info", contact_info.trim());
+      form.append("price", String(price));
+
+      photoFiles.slice(0, 6).forEach((file) => {
+        form.append("photos", file);
       });
 
+      const created = await apiPostForm("/api/listings", form);
       navigate(`/listings/${created.id}`);
     } catch (err) {
       setError(err.message);
@@ -112,6 +117,20 @@ export default function CreateListing() {
                 value={contact_info}
                 onChange={(e) => setContact(e.target.value)}
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="photos">Photos</Label>
+              <Input
+                id="photos"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) =>
+                  setPhotoFiles(Array.from(e.target.files) || [])
+                }
+              />
+              <p className="text-xs text-gray-600">Select up to 6 images</p>
             </div>
 
             <Button type="submit" disabled={submitting} className="w-full">
