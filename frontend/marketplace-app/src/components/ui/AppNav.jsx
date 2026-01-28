@@ -27,7 +27,7 @@ export default function AppNav() {
     <nav className="w-full border-b bg-background">
       <div className="max-w-screen mx-auto px-4 h-14 flex items-center justify-between">
         <Link to="/browse" className="font-semibold text-lg">
-          Marketplace
+          Campus Marketplace
         </Link>
 
         <NavigationMenu>
