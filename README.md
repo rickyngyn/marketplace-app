@@ -37,3 +37,5 @@ VITE_API_BASE_URL=http://localhost:5000
 ## Root folder
 1. `npm install`
 2. `npm run dev` (Runs frontend and backend concurrently)
+
+## Deployment Soon
