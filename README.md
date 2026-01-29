@@ -20,9 +20,13 @@ A full-stack marketplace web application using React, Node.js, Express, and Post
 2. `npm install`
 3. .env file in backend:
   ```
-  PORT=5000
-  DATABASE_URL=postgresql://username:password@localhost:5432/your_db_name
+  PORT=3000
   JWT_SECRET_KEY=your_secret_key
+  PGUSER=your_username
+  PGPASSWORD=your_password
+  PGHOST=localhost
+  PGPORT=5432
+  PGDATABASE=marketplace
   ```
 4. `mkdir uploads`
 
@@ -31,7 +35,7 @@ A full-stack marketplace web application using React, Node.js, Express, and Post
 2. `npm install`
 3. .env file in frontend:
 ```
-VITE_API_BASE_URL=http://localhost:5000
+VITE_API_BASE_URL=http://localhost:3000
 ```
 
 ## Root folder
