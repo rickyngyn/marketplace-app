@@ -45,4 +45,9 @@ VITE_API_BASE_URL=http://localhost:3000
 1. `npm install`
 2. `npm run dev` (Runs frontend and backend concurrently)
 
+## Images
+<img width="1906" height="896" alt="Screenshot 2026-01-29 162113" src="https://github.com/user-attachments/assets/5c3a3890-2538-4207-8334-400f1f4aaa69" />
+<img width="1909" height="894" alt="Screenshot 2026-01-29 162105" src="https://github.com/user-attachments/assets/4aad47a4-9899-482c-995b-968d4afddb11" />
+<img width="1909" height="905" alt="Screenshot 2026-01-29 162053" src="https://github.com/user-attachments/assets/42aa0435-cfb5-496a-8d4e-0868e616da69" />
+
 ## Deployment Soon
