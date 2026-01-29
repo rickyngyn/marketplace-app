@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { apiPost } from "@/api";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "../supabaseClient";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -38,13 +39,24 @@ export default function Login() {
     setLoggingIn(true);
 
     try {
-      const login = await apiPost("/api/auth/login", {
-        email: email.trim().toLowerCase(),
-        password: password,
-      });
+      const cleanEmail = email.trim().toLowerCase();
 
-      if (login.token) localStorage.setItem("token", login.token);
-      if (login.user) localStorage.setItem("user", JSON.stringify(login.user));
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+      });
+      
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      const accessToken = data.session?.access_token; 
+      const user = data.user;
+
+      if (accessToken) localStorage.setItem("token", accessToken);
+      if (user) localStorage.setItem("user", JSON.stringify(user));
+
       navigate("/browse");
     } catch (err) {
       setError(err.message);

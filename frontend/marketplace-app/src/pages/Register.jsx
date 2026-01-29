@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { apiPost } from "../api";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "../supabaseClient";
 
 export default function Register() {
   const [first_name, setFirstName] = useState("");
@@ -51,17 +51,27 @@ export default function Register() {
     setRegistering(true);
 
     try {
-      const register = await apiPost("/api/auth/register", {
-        first_name: first_name.trim(),
-        last_name: last_name.trim(),
-        email: email.trim().toLowerCase(),
-        password: password,
+      const cleanFirst = first_name.trim();
+      const cleanLast = last_name.trim();
+      const cleanEmail = email.trim().toLowerCase();
+
+      const { data, error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password,
+        options: {
+          data: {
+            first_name: cleanFirst,
+            last_name: cleanLast,
+          },
+        },
       });
 
-      if (register.token) localStorage.setItem("token", register.token);
-      if (register.user)
-        localStorage.setItem("user", JSON.stringify(register.user));
-      navigate("/login");
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      navigate("/");
     } catch (err) {
       setError(err.message);
     } finally {
