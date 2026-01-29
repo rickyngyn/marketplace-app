@@ -38,6 +38,9 @@ A full-stack marketplace web application using React, Node.js, Express, and Post
 VITE_API_BASE_URL=http://localhost:3000
 ```
 
+## Database Setup
+1. Run the setup.sql script in PostgreSQL 
+
 ## Root folder
 1. `npm install`
 2. `npm run dev` (Runs frontend and backend concurrently)
