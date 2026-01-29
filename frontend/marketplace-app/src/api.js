@@ -40,7 +40,7 @@ export async function apiPost(path, body) {
   const res = await fetch(`${BASE_URL}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...getAuthToken() },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body), 
   });
   const data = await res.json();
 
