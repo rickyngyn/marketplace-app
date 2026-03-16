@@ -50,4 +50,5 @@ VITE_API_BASE_URL=http://localhost:3000
 <img width="640" height="480" alt="Screenshot 2026-01-29 162105" src="https://github.com/user-attachments/assets/4aad47a4-9899-482c-995b-968d4afddb11" />
 <img width="640" height="480" alt="Screenshot 2026-01-29 162053" src="https://github.com/user-attachments/assets/42aa0435-cfb5-496a-8d4e-0868e616da69" />
 
-## Deployment Soon
+## Deployed
+Link: https://marketplace-app-0z9s.onrender.com 
