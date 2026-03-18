@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const listingRoutes = require("./routes/listings");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 
 dotenv.config();
 const app = express();
@@ -11,6 +12,12 @@ const port = process.env.PORT || 5000;
 
 const allowedOrigin =
   process.env.FRONTEND_URL || "http://localhost:5173";
+
+const uploadDir = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 app.use(
   cors({
