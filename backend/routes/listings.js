@@ -2,7 +2,7 @@ const express = require("express");
 const requireAuth = require("../middleware/requireAuth");
 const upload = require("../middleware/upload");
 const router = express.Router();
-const { Pool } = require("../db");
+const { pool } = require("../db");
 
 router.post("/", requireAuth, upload.array("photos", 6), async (req, res) => {
   const { title, description, price, contact_info } = req.body;
