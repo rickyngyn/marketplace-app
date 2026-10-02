@@ -1,10 +1,8 @@
-const { Pool } = require("pg");
+const { Pool } = require("../db");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-
-const pool = new Pool();
 
 router.post("/register", async (req, res) => {
   const { email, password, first_name, last_name } = req.body;
@@ -25,7 +23,7 @@ router.post("/register", async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const results = await pool.query(
       "INSERT INTO users (email, password_hash, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name",
-      [normalizedEmail, passwordHash, first_name, last_name]
+      [normalizedEmail, passwordHash, first_name, last_name],
     );
 
     const token = jwt.sign(
@@ -33,7 +31,7 @@ router.post("/register", async (req, res) => {
       process.env.JWT_SECRET_KEY,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     return res.status(201).json({
@@ -46,7 +44,7 @@ router.post("/register", async (req, res) => {
       },
     });
   } catch (err) {
-    console.error(err);
+    console.error("Register Error:", err);
     return res.status(500).json({ message: "Server Error" });
   }
 });
@@ -62,7 +60,7 @@ router.post("/login", async (req, res) => {
     const normalizedEmail = email.toLowerCase();
     const existingUser = await pool.query(
       "SELECT * FROM users WHERE email = $1",
-      [normalizedEmail]
+      [normalizedEmail],
     );
     if (existingUser.rows.length === 0) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -92,6 +90,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
+    console.error("Login Error: ", err)
     return res.status(500).json({ message: "Server Error" });
   }
 });
