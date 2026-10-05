@@ -44,6 +44,7 @@ router.get("/", async (req, res) => {
     );
     return res.json(results.rows);
   } catch (err) {
+    console.error("Get listings error:", err);
     return res.status(500).json({ message: "Server error" });
   }
 });

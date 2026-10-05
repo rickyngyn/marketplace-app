@@ -66,8 +66,8 @@ export default function Browse() {
           <ul className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {" "}
             {filteredListings.map((listing) => (
-              <Card className="max-w-64 p-4">
-                <li key={listing.id}>
+              <Card key={listing.id} className="max-w-64 p-4">
+                <li>
                   <Link to={`/listings/${listing.id}`}>
                     <div className="font-bold truncate">${listing.price}</div>
                     <div className="font-semibold truncate">
