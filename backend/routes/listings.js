@@ -64,7 +64,7 @@ router.get("/me", requireAuth, async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireAuth, async (req, res) => {
   const { id } = req.params;
   try {
     const results = await pool.query(

@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Browse from "./pages/Browse.jsx";
 import ListingDetails from "./pages/ListingDetails.jsx";
@@ -24,7 +24,8 @@ createRoot(document.getElementById("root")).render(
           <Route path="/create" element={<CreateListing />} />
           <Route path="/listings/me" element={<MyListings />} />
           <Route path="/listings/:id/edit" element={<EditListings />} />
-          <Route path="/" element={<Browse />}/>
+          <Route path="/browse" element={<Browse />}/>
+          <Route path="/" element = {<Navigate to="/browse"/>} />
         </Route>
       </Routes>
     </BrowserRouter>

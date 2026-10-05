@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { apiGet } from "../api";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -8,9 +8,14 @@ export default function ListingDetails() {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [error, setError] = useState("");
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchListing() {
+      if (!localStorage.getItem("token")) {
+        navigate("/login")
+        return;  
+      }
       try {
         const data = await apiGet(`/api/listings/${id}`);
         setListing(data);
@@ -20,6 +25,7 @@ export default function ListingDetails() {
     }
     fetchListing();
   }, [id]);
+
 
   const photos = Array.isArray(listing?.photos) ? listing.photos : [];
 
